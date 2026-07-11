@@ -28,20 +28,31 @@ public class OpenAiClient {
      * Sends the system + user prompt to OpenAI and returns the assistant reply.
      */
     public String complete(String systemPrompt, String userPrompt) {
+        return send(systemPrompt, userPrompt, false);
+    }
+
+    /**
+     * Same as {@link #complete} but instructs the model to reply with a JSON object.
+     */
+    public String completeJson(String systemPrompt, String userPrompt) {
+        return send(systemPrompt, userPrompt, true);
+    }
+
+    private String send(String systemPrompt, String userPrompt, boolean json) {
         String apiKey = properties.getOpenai().getApiKey();
         if (apiKey == null || apiKey.isBlank()) {
             throw new IllegalStateException(
                     "OpenAI API key is not configured. Set the OPENAI_API_KEY environment variable.");
         }
 
-        ChatCompletionRequest request = new ChatCompletionRequest(
-                properties.getOpenai().getDefaultModel(),
-                List.of(
-                        new ChatCompletionRequest.Message("system", systemPrompt),
-                        new ChatCompletionRequest.Message("user", userPrompt)
-                ),
-                0.7
+        List<ChatCompletionRequest.Message> messages = List.of(
+                new ChatCompletionRequest.Message("system", systemPrompt),
+                new ChatCompletionRequest.Message("user", userPrompt)
         );
+        String model = properties.getOpenai().getDefaultModel();
+        ChatCompletionRequest request = json
+                ? ChatCompletionRequest.json(model, messages, 0.7)
+                : new ChatCompletionRequest(model, messages, 0.7, null);
 
         try {
             ChatCompletionResponse response = openAiWebClient.post()

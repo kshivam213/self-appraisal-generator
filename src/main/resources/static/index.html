@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Self-Appraisal Generator</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <span class="brand-mark">M</span>
+      <span class="brand-name">Self-Appraisal Generator</span>
+    </div>
+    <span class="badge">AI powered</span>
+  </header>
+
+  <main class="container">
+    <section class="card form-card">
+      <h1>Generate your self-appraisal</h1>
+      <p class="subtitle">Fill in your details and the projects you worked on. We'll draft a
+        recommendation across your evaluation metrics.</p>
+
+      <form id="appraisal-form" novalidate>
+        <div class="grid-2">
+          <div class="field">
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" placeholder="e.g. Asha Rao" required />
+          </div>
+          <div class="field">
+            <label for="title">Title / Designation</label>
+            <input id="title" name="title" type="text" placeholder="e.g. Senior Software Engineer" required />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="track">Track</label>
+          <select id="track" name="track" required>
+            <option value="" disabled selected>Loading tracks…</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Metrics to evaluate
+            <span class="hint">(none selected = all metrics for the track)</span>
+          </label>
+          <div id="metrics" class="metrics-grid">
+            <p class="muted">Select a track to load its metrics.</p>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="projects">Projects you worked on</label>
+          <textarea id="projects" name="projects" rows="6"
+            placeholder="Describe the projects, impact, and outcomes in plain text…" required></textarea>
+        </div>
+
+        <div class="actions">
+          <button type="submit" id="submit-btn" class="btn-primary">
+            <span class="btn-label">Generate recommendation</span>
+            <span class="spinner" hidden></span>
+          </button>
+          <button type="reset" class="btn-ghost">Clear</button>
+        </div>
+
+        <p id="error" class="error-banner" hidden></p>
+      </form>
+    </section>
+
+    <section id="result-card" class="card result-card" hidden>
+      <div class="result-header">
+        <h2>Recommendation</h2>
+        <div class="result-tools">
+          <button id="copy-btn" class="btn-ghost small" type="button">Copy all</button>
+          <button id="download-btn" class="btn-ghost small" type="button">Download</button>
+        </div>
+      </div>
+      <p class="subtitle">Click a metric to expand. You can edit any section before copying.</p>
+      <div class="result-meta">
+        <span id="result-name" class="chip"></span>
+        <span id="result-title" class="chip"></span>
+        <span id="result-track" class="chip chip-accent"></span>
+      </div>
+      <div id="overall" class="overall"></div>
+      <article id="recommendation" class="recommendation"></article>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
+
