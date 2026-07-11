@@ -8,6 +8,39 @@ const spinner = submitBtn.querySelector(".spinner");
 const btnLabel = submitBtn.querySelector(".btn-label");
 const errorEl = $("error");
 const resultCard = $("result-card");
+const projectsInput = $("projects");
+const charCount = $("char-count");
+const metricCount = $("metric-count");
+
+function updateProgress() {
+  const identityDone = $("name").value.trim() && $("title").value.trim();
+  const lensDone = Boolean(trackSelect.value);
+  const evidenceDone = Boolean(projectsInput.value.trim());
+  const states = { identity: identityDone, lens: lensDone, evidence: evidenceDone, draft: !resultCard.hidden };
+  const completed = Object.values(states).filter(Boolean).length;
+  $("completion").textContent = `${Math.round((completed / 4) * 100)}% complete`;
+
+  let foundCurrent = false;
+  document.querySelectorAll(".progress-rail li").forEach((item) => {
+    const done = states[item.dataset.step];
+    item.classList.toggle("done", done);
+    item.classList.remove("active");
+    if (!done && !foundCurrent) {
+      item.classList.add("active");
+      foundCurrent = true;
+    }
+  });
+}
+
+function updateMetricCount() {
+  const count = document.querySelectorAll('input[name="metric"]:checked').length;
+  metricCount.textContent = count ? `${count} selected` : "All metrics";
+}
+
+form.addEventListener("input", () => {
+  charCount.textContent = `${projectsInput.value.length.toLocaleString()} / 6,000`;
+  updateProgress();
+});
 
 // Load all tracks on page load and populate the dropdown.
 async function loadTracks() {
@@ -55,6 +88,8 @@ async function loadMetrics(track) {
         </span>`;
       metricsBox.appendChild(label);
     });
+    metricsBox.addEventListener("change", updateMetricCount);
+    updateMetricCount();
   } catch (e) {
     metricsBox.innerHTML = '<p class="muted">Could not load metrics.</p>';
   }
@@ -101,6 +136,12 @@ form.addEventListener("submit", async (e) => {
 form.addEventListener("reset", () => {
   resultCard.hidden = true;
   hideError();
+  setTimeout(() => {
+    metricsBox.innerHTML = '<p class="muted">Select a track to see its review areas.</p>';
+    charCount.textContent = "0 / 6,000";
+    updateMetricCount();
+    updateProgress();
+  });
 });
 
 function renderResult(data) {
@@ -120,6 +161,7 @@ function renderResult(data) {
   }
 
   resultCard.hidden = false;
+  updateProgress();
   resultCard.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
@@ -231,7 +273,8 @@ $("download-btn").addEventListener("click", () => {
 function setLoading(loading) {
   submitBtn.disabled = loading;
   spinner.hidden = !loading;
-  btnLabel.textContent = loading ? "Generating…" : "Generate recommendation";
+  btnLabel.textContent = loading ? "Shaping your story…" : "Shape my appraisal";
+  submitBtn.querySelector(".arrow").hidden = loading;
 }
 
 function showError(msg) { errorEl.textContent = msg; errorEl.hidden = false; }
@@ -244,4 +287,4 @@ function escapeHtml(str) {
 }
 
 loadTracks();
-
+updateProgress();
