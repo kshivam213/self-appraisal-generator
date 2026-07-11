@@ -3,90 +3,119 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Self-Appraisal Generator</title>
+  <meta name="theme-color" content="#101815" />
+  <title>Bragbook — Turn your work into a story</title>
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
   <header class="app-header">
-    <div class="brand">
-      <span class="brand-mark">M</span>
-      <span class="brand-name">Self-Appraisal Generator</span>
-    </div>
-    <span class="badge">AI powered</span>
+    <a class="brand" href="#" aria-label="Bragbook home">
+      <span class="brand-mark" aria-hidden="true">B<span class="brand-dot">.</span></span>
+      <span class="brand-copy"><strong>bragbook</strong><small>your impact, articulated</small></span>
+    </a>
+    <div class="header-note"><span class="status-dot"></span> Private by design <span class="header-separator"></span> AI-assisted</div>
   </header>
 
-  <main class="container">
-    <section class="card form-card">
-      <h1>Generate your self-appraisal</h1>
-      <p class="subtitle">Fill in your details and the projects you worked on. We'll draft a
-        recommendation across your evaluation metrics.</p>
-
-      <form id="appraisal-form" novalidate>
-        <div class="grid-2">
-          <div class="field">
-            <label for="name">Name</label>
-            <input id="name" name="name" type="text" placeholder="e.g. Asha Rao" required />
-          </div>
-          <div class="field">
-            <label for="title">Title / Designation</label>
-            <input id="title" name="title" type="text" placeholder="e.g. Senior Software Engineer" required />
-          </div>
-        </div>
-
-        <div class="field">
-          <label for="track">Track</label>
-          <select id="track" name="track" required>
-            <option value="" disabled selected>Loading tracks…</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>Metrics to evaluate
-            <span class="hint">(none selected = all metrics for the track)</span>
-          </label>
-          <div id="metrics" class="metrics-grid">
-            <p class="muted">Select a track to load its metrics.</p>
-          </div>
-        </div>
-
-        <div class="field">
-          <label for="projects">Projects you worked on</label>
-          <textarea id="projects" name="projects" rows="6"
-            placeholder="Describe the projects, impact, and outcomes in plain text…" required></textarea>
-        </div>
-
-        <div class="actions">
-          <button type="submit" id="submit-btn" class="btn-primary">
-            <span class="btn-label">Generate recommendation</span>
-            <span class="spinner" hidden></span>
-          </button>
-          <button type="reset" class="btn-ghost">Clear</button>
-        </div>
-
-        <p id="error" class="error-banner" hidden></p>
-      </form>
+  <main class="page-shell">
+    <section class="hero">
+      <div class="eyebrow"><span>01</span> Your review copilot</div>
+      <h1>You did the work.<br /><em>Let’s make it visible.</em></h1>
+      <p>Turn shipped features, solved incidents, and quiet wins into an appraisal that sounds confident—and still sounds like you.</p>
+      <div class="hero-proof" aria-label="What Bragbook helps with">
+        <div><strong>Recall</strong><span>the work that mattered</span></div>
+        <div><strong>Translate</strong><span>effort into impact</span></div>
+        <div><strong>Refine</strong><span>your authentic voice</span></div>
+      </div>
     </section>
 
-    <section id="result-card" class="card result-card" hidden>
-      <div class="result-header">
-        <h2>Recommendation</h2>
-        <div class="result-tools">
-          <button id="copy-btn" class="btn-ghost small" type="button">Copy all</button>
-          <button id="download-btn" class="btn-ghost small" type="button">Download</button>
+    <div class="workspace">
+      <aside class="progress-rail" aria-label="Appraisal progress">
+        <p class="rail-label">BUILD PROGRESS</p>
+        <ol>
+          <li class="active" data-step="identity"><span>01</span><div><strong>Identity</strong><small>Who you are</small></div></li>
+          <li data-step="lens"><span>02</span><div><strong>Review lens</strong><small>How you’re measured</small></div></li>
+          <li data-step="evidence"><span>03</span><div><strong>Evidence</strong><small>What you delivered</small></div></li>
+          <li data-step="draft"><span>04</span><div><strong>Your draft</strong><small>Ready to refine</small></div></li>
+        </ol>
+        <blockquote>“Great engineers don’t just ship. They make the value of what they ship easy to understand.”</blockquote>
+      </aside>
+
+      <section class="form-card">
+        <div class="card-heading">
+          <div>
+            <span class="section-kicker">START YOUR STORY</span>
+            <h2>Build your impact brief</h2>
+          </div>
+          <span id="completion" class="completion">0% complete</span>
         </div>
+
+        <form id="appraisal-form" novalidate>
+          <fieldset data-section="identity">
+            <legend><span>01</span> The basics</legend>
+            <p class="field-intro">Give your draft the right context.</p>
+            <div class="grid-2">
+              <div class="field">
+                <label for="name">Your name</label>
+                <input id="name" name="name" type="text" placeholder="e.g. Asha Rao" autocomplete="name" required />
+              </div>
+              <div class="field">
+                <label for="title">Role / designation</label>
+                <input id="title" name="title" type="text" placeholder="e.g. Senior Software Engineer" required />
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset data-section="lens">
+            <legend><span>02</span> Choose your review lens</legend>
+            <p class="field-intro">We’ll tailor the language to your track and its expectations.</p>
+            <div class="field">
+              <label for="track">Career track</label>
+              <div class="select-wrap"><select id="track" name="track" required><option value="" disabled selected>Loading tracks…</option></select></div>
+            </div>
+            <div class="field metrics-field">
+              <div class="label-row">
+                <label>What should we spotlight?</label>
+                <span id="metric-count" class="selection-count">All metrics</span>
+              </div>
+              <p class="hint">Pick specific themes, or leave everything unchecked for a well-rounded review.</p>
+              <div id="metrics" class="metrics-grid"><p class="muted">Select a track to see its review areas.</p></div>
+            </div>
+          </fieldset>
+
+          <fieldset data-section="evidence">
+            <legend><span>03</span> Add your evidence</legend>
+            <p class="field-intro">Messy notes are welcome. Bullets, metrics, links, incidents—put it all here.</p>
+            <div class="prompt-card"><span aria-hidden="true">↳</span><p><strong>A useful prompt:</strong> What changed because of your work? Think users helped, time saved, risk reduced, or teammates unblocked.</p></div>
+            <div class="field">
+              <label for="projects">Your wins &amp; projects</label>
+              <textarea id="projects" name="projects" rows="7" maxlength="6000" placeholder="• Shipped checkout retry flow, reducing failed payments by 18%&#10;• Led the migration of 12 services with zero downtime&#10;• Mentored two engineers through their first production launches…" required></textarea>
+              <div class="textarea-meta"><span><kbd>Tip</kbd> Specific outcomes make stronger stories.</span><span id="char-count">0 / 6,000</span></div>
+            </div>
+          </fieldset>
+
+          <div class="actions">
+            <button type="submit" id="submit-btn" class="btn-primary"><span class="btn-label">Shape my appraisal</span><span class="arrow">↗</span><span class="spinner" hidden></span></button>
+            <button type="reset" class="btn-ghost">Start over</button>
+          </div>
+          <p class="reassurance"><span>✓</span> You’re always in control—edit every word before you use it.</p>
+          <p id="error" class="error-banner" role="alert" hidden></p>
+        </form>
+      </section>
+    </div>
+
+    <section id="result-card" class="result-card" hidden>
+      <div class="result-header">
+        <div><span class="section-kicker">YOUR IMPACT STORY</span><h2>A strong draft, ready for your voice.</h2></div>
+        <div class="result-tools"><button id="copy-btn" class="btn-ghost small" type="button">Copy all</button><button id="download-btn" class="btn-ghost small" type="button">Download .txt</button></div>
       </div>
-      <p class="subtitle">Click a metric to expand. You can edit any section before copying.</p>
-      <div class="result-meta">
-        <span id="result-name" class="chip"></span>
-        <span id="result-title" class="chip"></span>
-        <span id="result-track" class="chip chip-accent"></span>
-      </div>
+      <p class="result-help">Open any theme to review and edit it. Make it unmistakably yours.</p>
+      <div class="result-meta"><span id="result-name" class="chip"></span><span id="result-title" class="chip"></span><span id="result-track" class="chip chip-accent"></span></div>
       <div id="overall" class="overall"></div>
       <article id="recommendation" class="recommendation"></article>
     </section>
   </main>
 
+  <footer><span>bragbook<span class="brand-dot">.</span></span><p>Built for people who build things.</p></footer>
   <script src="/app.js"></script>
 </body>
 </html>
-
