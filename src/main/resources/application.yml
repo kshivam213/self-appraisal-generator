@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: self-appraisal-generator
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+appraisal:
+  openai:
+    base-url: ${OPENAI_BASE_URL:https://api.openai.com/v1}
+    api-key: ${OPENAI_API_KEY:}
+    timeout-ms: ${OPENAI_TIMEOUT_MS:30000}
+    default-model: ${OPENAI_DEFAULT_MODEL:gpt-4o-mini}
+
+  # Static metric configuration used to guide the self-appraisal recommendation.
+  # Each metric represents a dimension the reviewer wants the appraisal to speak to.
+  metrics:
+    engineering:
+      - key: code_quality
+        name: Code Quality
+        description: Writes clean, maintainable, well-tested code and follows engineering standards.
+      - key: delivery_ownership
+        name: Delivery & Ownership
+        description: Owns features end to end and delivers reliably within committed timelines.
+      - key: technical_depth
+        name: Technical Depth
+        description: Demonstrates strong grasp of systems, architecture, and problem solving.
+      - key: collaboration
+        name: Collaboration
+        description: Works effectively across teams, reviews code, and unblocks peers.
+      - key: impact
+        name: Business Impact
+        description: Connects engineering work to measurable business and customer outcomes.
+      - key: innovation
+        name: Innovation & Improvement
+        description: Proactively improves processes, tooling, and system reliability.
+
